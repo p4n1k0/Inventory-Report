@@ -3,6 +3,7 @@ from csv import reader
 from inventory_report.reports.simple_report import SimpleReport
 from inventory_report.reports.complete_report import CompleteReport
 from os import path
+from json import load
 
 
 class FileRead(ABC):
@@ -17,23 +18,30 @@ class CSV(FileRead):
         rows = []
         with open(path, 'r') as file:
             header, *rows = reader(file)
-        products = []
+        inventories = []
         for product in rows:
             cache = {}
             for index in range(0, len(product)):
                 cache[header[index]] = product[index]
-            products.append(cache)
-        return products
+            inventories.append(cache)
+        return inventories
+
+
+class JSON(FileRead):
+    def read(path):
+        with open(path, 'r') as file:
+            inventories = load(file)
+            return inventories
 
 
 class Inventory:
     @staticmethod
-    def import_data(data_path, type):
-        x, *extension = path.splitext(data_path)[1]
-        data = eval(''.join(extension).upper() + '.read(data_path)')
+    def import_data(inventory, type):
+        x, *extension = path.splitext(inventory)[1]
+        inventories = eval(''.join(extension).upper() + '.read(inventory)')
         if type == 'simples':
-            report = SimpleReport.generate(data)
+            report = SimpleReport.generate(inventories)
             return report
         elif type == 'completo':
-            report = CompleteReport.generate(data)
+            report = CompleteReport.generate(inventories)
             return report
