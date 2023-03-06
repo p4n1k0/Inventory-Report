@@ -4,7 +4,7 @@ from collections import Counter
 
 class SimpleReport:
     @staticmethod
-    def get_dates(products):
+    def _get_dates(products):
         fabrication_date = products[0]['data_de_fabricacao']
         expiration_date = str(date.today() + timedelta(days=366))
         for product in products:
@@ -17,7 +17,7 @@ class SimpleReport:
         return (fabrication_date, expiration_date)
 
     @staticmethod
-    def get_company(companies):
+    def _get_company(companies):
         products = Counter(
             company['nome_da_empresa'] for company in companies
             )
@@ -25,10 +25,10 @@ class SimpleReport:
 
     @staticmethod
     def generate(product):
-        dates = SimpleReport.get_dates(product)
+        dates = SimpleReport._get_dates(product)
         fabrication_date = dates[0]
         expiration_date = dates[1]
-        company = SimpleReport.get_company(product)
+        company = SimpleReport._get_company(product)
         return (
             f'Data de fabricação mais antiga: {fabrication_date}\n' +
             f'Data de validade mais próxima: {expiration_date}\n' +
