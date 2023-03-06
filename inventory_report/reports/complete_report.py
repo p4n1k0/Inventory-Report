@@ -5,12 +5,11 @@ class CompleteReport(SimpleReport):
     @staticmethod
     def products_company(companies_list):
         reports = {}
-        num = 1
         for company in companies_list:
             try:
-                reports[company['nome_da_empresa']] += num
+                reports[company['nome_da_empresa']] += 1
             except Exception:
-                reports[company['nome_da_empresa']] = num
+                reports[company['nome_da_empresa']] = 1
         string = ''
         for company in reports:
             string += f'- {company}: {reports[company]}\n'
