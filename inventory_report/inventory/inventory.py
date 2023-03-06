@@ -4,6 +4,7 @@ from inventory_report.reports.simple_report import SimpleReport
 from inventory_report.reports.complete_report import CompleteReport
 from os import path
 from json import load
+from xml.etree import ElementTree
 
 
 class FileRead(ABC):
@@ -34,11 +35,24 @@ class JSON(FileRead):
             return inventories
 
 
+class XML(FileRead):
+    def read(path):
+        xml_file = ElementTree.parse(path)
+        admin = xml_file.getroot()
+        products = []
+        for reading in admin:
+            reports = {}
+            for file in reading:
+                reports[file.tag] = file.text
+            products.append(reports)
+        return products
+
+
 class Inventory:
     @staticmethod
-    def import_data(inventory, type):
-        x, *extension = path.splitext(inventory)[1]
-        inventories = eval(''.join(extension).upper() + '.read(inventory)')
+    def import_data(file, type):
+        x, *extension = path.splitext(file)[1]
+        inventories = eval(''.join(extension).upper() + '.read(file)')
         if type == 'simples':
             report = SimpleReport.generate(inventories)
             return report

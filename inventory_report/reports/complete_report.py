@@ -3,9 +3,9 @@ from inventory_report.reports.simple_report import SimpleReport
 
 class CompleteReport(SimpleReport):
     @staticmethod
-    def products_company(companies_list):
+    def products_company(companies):
         reports = {}
-        for company in companies_list:
+        for company in companies:
             try:
                 reports[company['nome_da_empresa']] += 1
             except Exception:
